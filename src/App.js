@@ -13,14 +13,17 @@ function App() {
   const counter = useSelector(state => state.counter.value);
   const { posts, loading, error } = useSelector(state => state.posts);
 
-  useEffect(() => {
-    dispatch(getPosts());
-  }, []);
+  useEffect(
+    () => {
+      dispatch(getPosts());
+    },
+    [dispatch]
+  );
 
   return (
     <div className="App">
-      <h1>Redux Toolkit Starter</h1>
-      <div>
+      <div className="counter">
+        <h1>Redux Toolkit Starter</h1>
         <p>
           {counter}
         </p>
@@ -31,7 +34,7 @@ function App() {
 
       <hr />
 
-      <div>
+      <div className="container">
         {loading && <p>...</p>}
         {error &&
           <p>
