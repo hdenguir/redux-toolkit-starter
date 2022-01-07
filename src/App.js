@@ -1,25 +1,53 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect } from "react";
+import { connect, useDispatch, useSelector } from "react-redux";
+import "./App.css";
+import {
+  decrement,
+  increment,
+  incrementAmount
+} from "./redux/slices/counterSlice";
+import { getPosts } from "./redux/slices/postsSlice";
 
 function App() {
+  const dispatch = useDispatch();
+  const counter = useSelector(state => state.counter.value);
+  const { posts, loading, error } = useSelector(state => state.posts);
+
+  useEffect(() => {
+    dispatch(getPosts());
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+      <h1>Redux Toolkit Starter</h1>
+      <div>
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          {counter}
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <button onClick={() => dispatch(increment())}>+</button>
+        <button onClick={() => dispatch(decrement())}>-</button>
+        <button onClick={() => dispatch(incrementAmount(10))}>+10</button>
+      </div>
+
+      <hr />
+
+      <div>
+        {loading && <p>...</p>}
+        {error &&
+          <p>
+            {error}
+          </p>}
+        {posts &&
+          <ul>
+            {posts.map(post =>
+              <li key={post.id}>
+                {post.title}
+              </li>
+            )}
+          </ul>}
+      </div>
     </div>
   );
 }
 
-export default App;
+export default connect()(App);
